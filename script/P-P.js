@@ -1,63 +1,27 @@
-// ── Mobile nav ──
-const burger = document.getElementById('burger');
-const mobileMenu = document.getElementById('mobileMenu');
+const menuButton = document.querySelector(".menu-button");
+const navigationLinks = document.querySelector(".nav-links");
 
-burger.addEventListener('click', () => {
-  mobileMenu.classList.toggle('open');
+function closeMenu() {
+  navigationLinks.classList.remove("is-open");
+  menuButton.setAttribute("aria-expanded", "false");
+  menuButton.setAttribute("aria-label", "Open navigation menu");
+}
+
+menuButton.addEventListener("click", () => {
+  const isOpen = navigationLinks.classList.toggle("is-open");
+  menuButton.setAttribute("aria-expanded", String(isOpen));
+  menuButton.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
 });
 
-function closeMobile() {
-  mobileMenu.classList.remove('open');
-}
+navigationLinks.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", closeMenu);
+});
 
-// ── Scroll to contact ──
-function scrollToContact() {
-  document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-}
-
-// ── Navbar shadow on scroll ──
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 40) {
-    navbar.style.background = 'rgba(10,10,10,0.97)';
-  } else {
-    navbar.style.background = 'rgba(10,10,10,0.85)';
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeMenu();
+    menuButton.focus();
   }
 });
 
-// ── Scroll reveal ──
-const fadeEls = document.querySelectorAll(
-  '.skill-card, .project-card, .service-card, .contact-card, .about-card-inner, .about-text'
-);
-
-fadeEls.forEach(el => el.classList.add('fade-up'));
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12 });
-
-fadeEls.forEach(el => observer.observe(el));
-
-// ── Active nav link highlight ──
-const sections = document.querySelectorAll('section[id]');
-const navAnchors = document.querySelectorAll('.nav-links a');
-
-const sectionObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      navAnchors.forEach(a => {
-        a.style.color = '';
-        if (a.getAttribute('href') === '#' + entry.target.id) {
-          a.style.color = 'var(--ink)';
-        }
-      });
-    }
-  });
-}, { rootMargin: '-40% 0px -55% 0px' });
-
-sections.forEach(s => sectionObserver.observe(s));
+document.getElementById("year").textContent = new Date().getFullYear();
