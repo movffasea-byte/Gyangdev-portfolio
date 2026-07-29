@@ -9,8 +9,12 @@ function closeMenu() {
 
 menuButton.addEventListener("click", () => {
   const isOpen = navigationLinks.classList.toggle("is-open");
+
   menuButton.setAttribute("aria-expanded", String(isOpen));
-  menuButton.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
+  menuButton.setAttribute(
+    "aria-label",
+    isOpen ? "Close navigation menu" : "Open navigation menu"
+  );
 });
 
 navigationLinks.querySelectorAll("a").forEach((link) => {
